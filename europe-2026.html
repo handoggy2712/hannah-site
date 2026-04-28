@@ -1,0 +1,702 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>European Summer 2026 — Hannah</title>
+<link rel="manifest" href="/manifest.json">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="Hannah">
+<meta name="theme-color" content="#FDFCFA">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+<style>
+  /* --- HERO --- */
+  .hero {
+    padding: 32px 24px 28px;
+    max-width: 640px;
+    margin: 0 auto;
+    animation: fadeUp 0.8s ease both;
+  }
+  .hero h1 {
+    font-family: var(--font-heading);
+    font-weight: 500;
+    font-size: 26px;
+    color: var(--title);
+    letter-spacing: -0.5px;
+    line-height: 1.3;
+    margin-bottom: 8px;
+  }
+  .hero .subtitle {
+    font-family: var(--font-heading);
+    font-weight: 300;
+    font-size: 13px;
+    color: var(--subtitle);
+    letter-spacing: 0.2px;
+    line-height: 1.8;
+  }
+  .hero .divider {
+    width: 100%;
+    height: 1px;
+    background: var(--divider);
+    margin: 22px 0 0;
+  }
+
+  /* --- ITINERARY NAV (scrollable, below site nav) --- */
+  .sticky-nav {
+    position: sticky;
+    top: var(--nav-height);
+    z-index: 100;
+    background: rgba(253, 252, 250, 0.92);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--divider);
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+  .sticky-nav::-webkit-scrollbar { display: none; }
+  .nav-track {
+    display: flex;
+    gap: 0;
+    max-width: 640px;
+    margin: 0 auto;
+    padding: 0 24px;
+  }
+  .nav-dot {
+    flex-shrink: 0;
+    padding: 13px 12px;
+    font-family: var(--font-heading);
+    font-size: 11px;
+    font-weight: 400;
+    color: var(--subtitle);
+    cursor: pointer;
+    border-bottom: 2px solid transparent;
+    transition: all 0.3s ease;
+    white-space: nowrap;
+    text-decoration: none;
+  }
+  .nav-dot:hover, .nav-dot.active {
+    color: var(--title);
+    border-bottom-color: var(--accent-warm);
+  }
+
+  /* --- MAIN CONTENT --- */
+  .content {
+    max-width: 640px;
+    margin: 0 auto;
+    padding: 0 24px 80px;
+  }
+
+  /* --- SECTION HEADINGS --- */
+  .section-heading {
+    font-family: var(--font-heading);
+    font-weight: 500;
+    font-size: 20px;
+    color: var(--title);
+    margin: 48px 0 6px;
+    letter-spacing: -0.3px;
+  }
+  .section-sub {
+    font-family: var(--font-heading);
+    font-weight: 300;
+    font-size: 12px;
+    color: var(--subtitle);
+    margin-bottom: 20px;
+    letter-spacing: 0.2px;
+  }
+
+  /* --- CARDS --- */
+  .card {
+    background: #fff;
+    border: 1px solid var(--divider);
+    border-radius: 12px;
+    margin-bottom: 20px;
+    overflow: hidden;
+    animation: fadeUp 0.6s ease both;
+  }
+  .card-header {
+    padding: 18px 20px 14px;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 12px;
+    border-bottom: 1px solid var(--divider);
+  }
+  .card-header-left { flex: 1; }
+  .card-title {
+    font-family: var(--font-heading);
+    font-weight: 500;
+    font-size: 16px;
+    color: var(--title);
+    letter-spacing: -0.2px;
+  }
+  .card-dates {
+    font-family: var(--font-heading);
+    font-weight: 300;
+    font-size: 12px;
+    color: var(--subtitle);
+    margin-top: 3px;
+  }
+  .badge {
+    font-family: var(--font-heading);
+    font-size: 11px;
+    font-weight: 500;
+    padding: 4px 10px;
+    border-radius: 20px;
+    white-space: nowrap;
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+  .badge-booked { background: var(--badge-booked-bg); color: var(--badge-booked); }
+  .badge-action { background: var(--badge-action-bg); color: var(--badge-action); }
+
+  .card-body { padding: 14px 20px 18px; }
+  .detail-row {
+    display: flex;
+    padding: 5px 0;
+    gap: 14px;
+    align-items: baseline;
+  }
+  .detail-label {
+    font-family: var(--font-heading);
+    font-weight: 400;
+    font-size: 11px;
+    color: var(--subtitle);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    min-width: 96px;
+    flex-shrink: 0;
+  }
+  .detail-value {
+    font-size: 13px;
+    color: var(--body);
+    line-height: 1.6;
+  }
+  .detail-value.highlight {
+    color: var(--title);
+    font-weight: 400;
+  }
+  .card-note {
+    background: var(--callout-bg);
+    margin: 0 20px 18px;
+    padding: 12px 14px;
+    border-radius: 8px;
+    font-size: 13px;
+    font-weight: 400;
+    color: var(--callout-text);
+    line-height: 1.65;
+  }
+
+  /* --- TRANSIT PILLS --- */
+  .transit {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 6px 0 6px 8px;
+    margin-bottom: 20px;
+  }
+  .transit-line {
+    width: 20px;
+    height: 1px;
+    background: var(--divider);
+    flex-shrink: 0;
+  }
+  .transit-text {
+    font-family: var(--font-heading);
+    font-size: 12px;
+    font-weight: 300;
+    color: var(--subtitle);
+    letter-spacing: 0.2px;
+  }
+
+  /* --- BIRTHDAY CALLOUT --- */
+  .birthday-callout {
+    background: linear-gradient(135deg, #FFF8F0 0%, #FFF0E6 100%);
+    border: 1px solid #F0DCC8;
+    border-radius: 12px;
+    padding: 18px 20px;
+    margin: -4px 0 20px;
+    text-align: center;
+  }
+  .birthday-callout .emoji { font-size: 26px; margin-bottom: 6px; }
+  .birthday-callout .text {
+    font-family: var(--font-heading);
+    font-size: 14px;
+    font-weight: 400;
+    color: var(--title);
+  }
+
+  /* --- INFO CARDS (transport section) --- */
+  .info-card {
+    background: var(--callout-bg);
+    border-radius: 12px;
+    padding: 18px 20px;
+    margin-bottom: 14px;
+  }
+  .info-card-title {
+    font-family: var(--font-heading);
+    font-weight: 500;
+    font-size: 13px;
+    color: var(--title);
+    margin-bottom: 10px;
+  }
+
+  /* --- TODO LIST --- */
+  .open-items {
+    margin-top: 40px;
+    padding-top: 28px;
+    border-top: 1px solid var(--divider);
+  }
+  .todo-item {
+    display: flex;
+    gap: 12px;
+    padding: 9px 0;
+    align-items: flex-start;
+  }
+  .todo-dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    margin-top: 7px;
+    flex-shrink: 0;
+    background: var(--subtitle);
+  }
+  .todo-text { font-size: 13px; line-height: 1.6; }
+
+  /* --- FOOTER --- */
+  .footer {
+    max-width: 640px;
+    margin: 0 auto;
+    padding: 28px 24px 48px;
+    border-top: 1px solid var(--divider);
+    font-family: var(--font-heading);
+    font-size: 12px;
+    font-weight: 300;
+    color: var(--subtitle);
+  }
+
+  /* --- RESPONSIVE --- */
+  @media (max-width: 480px) {
+    .hero { padding: 28px 20px 22px; }
+    .hero h1 { font-size: 22px; }
+    .content { padding: 0 20px 60px; }
+    .nav-track { padding: 0 16px; }
+    .card-header { padding: 14px 16px 12px; }
+    .card-body { padding: 12px 16px 16px; }
+    .card-note { margin: 0 16px 16px; }
+    .detail-row { flex-direction: column; gap: 2px; }
+    .detail-label { min-width: unset; }
+    .info-card { padding: 16px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- Site nav -->
+<nav class="site-nav">
+  <a class="site-nav-back" href="holidays.html">
+    <svg viewBox="0 0 9 15"><polyline points="8,1 1,7.5 8,14"/></svg>
+    Holidays
+  </a>
+  <span class="site-nav-title">Europe 2026</span>
+</nav>
+
+<!-- HERO -->
+<div class="hero">
+  <h1>European summer 2026</h1>
+  <div class="subtitle">
+    14 June – 15 July  ·  France, Italy &amp; Germany<br>
+    Hannah &amp; Tom  ·  Bea (7), Lonnie (4), Baby (3mo)  ·  Tom's parents (Provence → wedding)<br>
+    Rental car: Avignon TGV → Munich Airport
+  </div>
+  <div class="divider"></div>
+</div>
+
+<!-- ITINERARY NAV -->
+<nav class="sticky-nav">
+  <div class="nav-track">
+    <a class="nav-dot" href="#paris">Paris</a>
+    <a class="nav-dot" href="#disney">Disney</a>
+    <a class="nav-dot" href="#provence">Provence</a>
+    <a class="nav-dot" href="#nice">Nice</a>
+    <a class="nav-dot" href="#finale">Finale Ligure</a>
+    <a class="nav-dot" href="#wedding">Wedding</a>
+    <a class="nav-dot" href="#como">Lake Como</a>
+    <a class="nav-dot" href="#dolomites">Dolomites</a>
+    <a class="nav-dot" href="#munich">Munich</a>
+    <a class="nav-dot" href="#transport">Transport</a>
+  </div>
+</nav>
+
+<div class="content">
+
+  <!-- 1. PARIS -->
+  <div id="paris">
+    <h2 class="section-heading">Paris</h2>
+    <div class="section-sub">Leg 1  ·  5 nights  ·  Jun 14–19</div>
+  </div>
+
+  <div class="card" style="animation-delay:0.05s">
+    <div class="card-header">
+      <div class="card-header-left">
+        <div class="card-title">Hôtel du Sentier</div>
+        <div class="card-dates">Sunday 14 June – Friday 19 June</div>
+      </div>
+      <span class="badge badge-booked">Booked</span>
+    </div>
+    <div class="card-body">
+      <div class="detail-row"><span class="detail-label">Rooms</span><span class="detail-value">2 connecting rooms: Signature + Superior French Windows, with baby cot</span></div>
+      <div class="detail-row"><span class="detail-label">Breakfast</span><span class="detail-value">Not included</span></div>
+      <div class="detail-row"><span class="detail-label">Cancellation</span><span class="detail-value">Non-refundable</span></div>
+      <div class="detail-row"><span class="detail-label">Transit in</span><span class="detail-value">Fly into Paris CDG on QR 043, arriving 15:20. Private minivan transfer recommended.</span></div>
+      <div class="detail-row"><span class="detail-label">Contact</span><span class="detail-value">reservation@hoteldusentier.com · +33 1 86 54 12 12</span></div>
+    </div>
+    <div class="card-note">City exploration, museums, parks — relaxed start after the long flight.</div>
+  </div>
+
+  <div class="transit">
+    <div class="transit-line"></div>
+    <span class="transit-text">Train or shuttle to Disneyland · ~45 min</span>
+  </div>
+
+  <!-- 2. DISNEYLAND -->
+  <div id="disney">
+    <h2 class="section-heading">Disneyland Paris</h2>
+    <div class="section-sub">Leg 2  ·  2 nights  ·  Jun 19–21</div>
+  </div>
+
+  <div class="card" style="animation-delay:0.1s">
+    <div class="card-header">
+      <div class="card-header-left">
+        <div class="card-title">Disneyland Hotel</div>
+        <div class="card-dates">Friday 19 June – Sunday 21 June</div>
+      </div>
+      <span class="badge badge-booked">Booked</span>
+    </div>
+    <div class="card-body">
+      <div class="detail-row"><span class="detail-label">Ref</span><span class="detail-value">#32895126</span></div>
+      <div class="detail-row"><span class="detail-label">Room</span><span class="detail-value">Superior Room with terrace, sleeps 4, two double beds</span></div>
+      <div class="detail-row"><span class="detail-label">Includes</span><span class="detail-value">3-day access to both Disney parks</span></div>
+      <div class="detail-row"><span class="detail-label">Breakfast</span><span class="detail-value">Not included</span></div>
+      <div class="detail-row"><span class="detail-label">Check-out</span><span class="detail-value">11:00 AM (left luggage available)</span></div>
+      <div class="detail-row"><span class="detail-label">Contact</span><span class="detail-value">Disneyland Paris reservations via website</span></div>
+    </div>
+    <div class="card-note">Parks, parades, character breakfasts — magical for the kids.</div>
+  </div>
+
+  <div class="transit">
+    <div class="transit-line"></div>
+    <span class="transit-text">OUIGO train to Avignon TGV · 2h 37min · then collect rental car</span>
+  </div>
+
+  <!-- 3. PROVENCE -->
+  <div id="provence">
+    <h2 class="section-heading">Provence</h2>
+    <div class="section-sub">Leg 3  ·  6 nights  ·  Jun 21–27  ·  Tom's parents join</div>
+  </div>
+
+  <div class="card" style="animation-delay:0.15s">
+    <div class="card-header">
+      <div class="card-header-left">
+        <div class="card-title">Villa Alma (Mas Alma)</div>
+        <div class="card-dates">Sunday 21 June – Saturday 27 June</div>
+      </div>
+      <span class="badge badge-booked">Booked</span>
+    </div>
+    <div class="card-body">
+      <div class="detail-row"><span class="detail-label">Ref</span><span class="detail-value">PH-0810 via Provence Holidays</span></div>
+      <div class="detail-row"><span class="detail-label">Property</span><span class="detail-value">Private villa, 5 bedrooms, 3 bathrooms, sleeps 10. Saint-Rémy-de-Provence.</span></div>
+      <div class="detail-row"><span class="detail-label">Guests</span><span class="detail-value">4 adults, 2 children, 1 baby</span></div>
+      <div class="detail-row"><span class="detail-label">Breakfast</span><span class="detail-value">Self-catering (private villa)</span></div>
+      <div class="detail-row"><span class="detail-label">Check-in</span><span class="detail-value">Sunday 21 June (confirmed with owner)</span></div>
+      <div class="detail-row"><span class="detail-label">Cancellation</span><span class="detail-value">Non-refundable. Cancellation insurance automatically included (covers illness, natural disaster, visa refusal, strikes).</span></div>
+      <div class="detail-row"><span class="detail-label">Contact</span><span class="detail-value">Sydney Jouffret, info@provenceholidays.com · +33 4 86 69 30 89</span></div>
+    </div>
+    <div class="card-note">Lavender fields, markets, château country — relaxed pace for the whole family.</div>
+  </div>
+
+  <div class="transit">
+    <div class="transit-line"></div>
+    <span class="transit-text">Drive to Nice · ~2 hours</span>
+  </div>
+
+  <!-- 4. NICE -->
+  <div id="nice">
+    <h2 class="section-heading">Nice, French Riviera</h2>
+    <div class="section-sub">Leg 4  ·  3 nights  ·  Jun 27–30</div>
+  </div>
+
+  <div class="card" style="animation-delay:0.2s">
+    <div class="card-header">
+      <div class="card-header-left">
+        <div class="card-title">Mama Shelter Nice</div>
+        <div class="card-dates">Saturday 27 June – Tuesday 30 June</div>
+      </div>
+      <span class="badge badge-booked">Booked</span>
+    </div>
+    <div class="card-body">
+      <div class="detail-row"><span class="detail-label">Refs</span><span class="detail-value">QFPPDBRV (family) + QFPPDBXV (in-laws)</span></div>
+      <div class="detail-row"><span class="detail-label">Family room</span><span class="detail-value">XXL Mama Family — 49m², 2 connecting bedrooms (Large Mama Double + Large Mama Triple), sleeps 5, baby cot included</span></div>
+      <div class="detail-row"><span class="detail-label">In-laws room</span><span class="detail-value">Large Mama Double (nearby)</span></div>
+      <div class="detail-row"><span class="detail-label">Breakfast</span><span class="detail-value">Included (both rooms)</span></div>
+      <div class="detail-row"><span class="detail-label">Check-in / out</span><span class="detail-value">3:00 PM / 12:00 PM</span></div>
+      <div class="detail-row"><span class="detail-label">Cancellation</span><span class="detail-value">Free cancellation up to 24 hours before arrival (before 12pm)</span></div>
+      <div class="detail-row"><span class="detail-label">Address</span><span class="detail-value">21 boulevard de Riquier, 06300 Nice</span></div>
+      <div class="detail-row"><span class="detail-label">Contact</span><span class="detail-value">Eugenie, nice@mamashelter.com · +33 4 28 95 11 98</span></div>
+    </div>
+    <div class="card-note">Old Town, beaches, Promenade des Anglais — vibrant and fun.</div>
+  </div>
+
+  <div class="transit">
+    <div class="transit-line"></div>
+    <span class="transit-text">Drive to Finale Ligure · ~1h 30min via A10</span>
+  </div>
+
+  <!-- 5. FINALE LIGURE -->
+  <div id="finale">
+    <h2 class="section-heading">Finale Ligure</h2>
+    <div class="section-sub">Leg 5  ·  3 nights  ·  Jun 30 – Jul 3</div>
+  </div>
+
+  <div class="card" style="animation-delay:0.25s">
+    <div class="card-header">
+      <div class="card-header-left">
+        <div class="card-title">Hotel Punta Est</div>
+        <div class="card-dates">Tuesday 30 June – Friday 3 July</div>
+      </div>
+      <span class="badge badge-booked">Booked</span>
+    </div>
+    <div class="card-body">
+      <div class="detail-row"><span class="detail-label">Suite</span><span class="detail-value">Big Family Suite (2 floors) in the dependance — ground floor: double room, bathroom, sitting room, terrace. First floor: 3 bedrooms, bathroom, balcony with sea view.</span></div>
+      <div class="detail-row"><span class="detail-label">Guests</span><span class="detail-value">4 adults, 2 children, 1 baby (€830/night for the whole family)</span></div>
+      <div class="detail-row"><span class="detail-label">Breakfast</span><span class="detail-value">Not included</span></div>
+      <div class="detail-row"><span class="detail-label">Includes</span><span class="detail-value">Private parking, WiFi, heated pool, towel service, jacuzzi in natural grotto (30 min/day on reservation)</span></div>
+      <div class="detail-row"><span class="detail-label">Cancellation</span><span class="detail-value">Free cancellation up to 2 weeks before arrival (~16 June). After that, 1–5 nights charged.</span></div>
+      <div class="detail-row"><span class="detail-label">Contact</span><span class="detail-value">Anna, info@puntaest.com · +39 019 600 611</span></div>
+    </div>
+    <div class="card-note">Cliffside fairytale setting, sandy beaches, grotto jacuzzi — unforgettable.</div>
+  </div>
+
+  <div class="transit">
+    <div class="transit-line"></div>
+    <span class="transit-text">Drive to Nizza Monferrato · ~1h 15min</span>
+  </div>
+
+  <!-- 6. WEDDING -->
+  <div id="wedding">
+    <h2 class="section-heading">Piedmont — the wedding</h2>
+    <div class="section-sub">Leg 6  ·  2 nights  ·  Jul 3–5  ·  Tom's parents' last stop</div>
+  </div>
+
+  <div class="card" style="animation-delay:0.3s">
+    <div class="card-header">
+      <div class="card-header-left">
+        <div class="card-title">Agriturismo Tenuta La Romana</div>
+        <div class="card-dates">Friday 3 July – Sunday 5 July</div>
+      </div>
+      <span class="badge badge-booked">Booked</span>
+    </div>
+    <div class="card-body">
+      <div class="detail-row"><span class="detail-label">Ref</span><span class="detail-value">#9820/2025</span></div>
+      <div class="detail-row"><span class="detail-label">Room</span><span class="detail-value">Family Suite, 4 guests</span></div>
+      <div class="detail-row"><span class="detail-label">Breakfast</span><span class="detail-value">Included (rich buffet breakfast)</span></div>
+      <div class="detail-row"><span class="detail-label">Includes</span><span class="detail-value">Daily room cleaning, WiFi, pool access, parking</span></div>
+      <div class="detail-row"><span class="detail-label">Contact</span><span class="detail-value">Cristina, info@tenutalaromana.com · +39 0141 727521</span></div>
+    </div>
+    <div class="card-note">The wedding! Piedmont hills, wine country. Tom's parents depart after this stop — from here it's just the five of you.</div>
+  </div>
+
+  <div class="transit">
+    <div class="transit-line"></div>
+    <span class="transit-text">Drive to Bellagio · ~2h 30min</span>
+  </div>
+
+  <!-- 7. LAKE COMO -->
+  <div id="como">
+    <h2 class="section-heading">Lake Como</h2>
+    <div class="section-sub">Leg 7  ·  4 nights  ·  Jul 5–9  ·  Family of 5 only</div>
+  </div>
+
+  <div class="card" style="animation-delay:0.35s">
+    <div class="card-header">
+      <div class="card-header-left">
+        <div class="card-title">Hotel Belvedere Bellagio</div>
+        <div class="card-dates">Sunday 5 July – Thursday 9 July</div>
+      </div>
+      <span class="badge badge-booked">Booked</span>
+    </div>
+    <div class="card-body">
+      <div class="detail-row"><span class="detail-label">Rooms</span><span class="detail-value">2 connecting Corner Suites with lake view and balcony — Room 1: 2 guests. Room 2: 2 + crib.</span></div>
+      <div class="detail-row"><span class="detail-label">Rate</span><span class="detail-value">€1,750/night per room (BB — best available rate)</span></div>
+      <div class="detail-row"><span class="detail-label">Breakfast</span><span class="detail-value">Included</span></div>
+      <div class="detail-row"><span class="detail-label">Check-in / out</span><span class="detail-value">3:00 PM / 12:00 PM (noon)</span></div>
+      <div class="detail-row"><span class="detail-label">Includes</span><span class="detail-value">Wellness &amp; Fitness Centre (on reservation), heated outdoor pool, infinity jacuzzi, full spa (sauna, steam, salt room, experience showers), free parking, WiFi, beach towels, sun chairs, outside bar service</span></div>
+      <div class="detail-row"><span class="detail-label">City tax</span><span class="detail-value">€4 per person/night (not included in rate)</span></div>
+      <div class="detail-row"><span class="detail-label">Cancellation</span><span class="detail-value">Free up to 21 days before arrival (before 14 June). From 20 days onward: 100% penalty.</span></div>
+      <div class="detail-row"><span class="detail-label">Contact</span><span class="detail-value">info@belvederebellagio.com</span></div>
+    </div>
+  </div>
+
+  <div class="birthday-callout">
+    <div class="emoji">🎂</div>
+    <div class="text">Bea's 7th birthday — 8 July — right here at Lake Como</div>
+  </div>
+
+  <div class="transit">
+    <div class="transit-line"></div>
+    <span class="transit-text">Drive to Lüsen, Dolomites · ~3 hours</span>
+  </div>
+
+  <!-- 8. DOLOMITES -->
+  <div id="dolomites">
+    <h2 class="section-heading">Dolomites</h2>
+    <div class="section-sub">Leg 8  ·  5 nights  ·  Jul 9–14</div>
+  </div>
+
+  <div class="card" style="animation-delay:0.4s">
+    <div class="card-header">
+      <div class="card-header-left">
+        <div class="card-title">Sonnwies Family Resort</div>
+        <div class="card-dates">Thursday 9 July – Tuesday 14 July</div>
+      </div>
+      <span class="badge badge-booked">Booked</span>
+    </div>
+    <div class="card-body">
+      <div class="detail-row"><span class="detail-label">Ref</span><span class="detail-value">DSR055BB7ZEW5</span></div>
+      <div class="detail-row"><span class="detail-label">Room</span><span class="detail-value">Luxury Family Suite Mountain — 2-room suite with children's room, loft bed, design bathtub, balcony, 50m²</span></div>
+      <div class="detail-row"><span class="detail-label">Meal plan</span><span class="detail-value">Full board — breakfast buffet, lunch, afternoon tea/patisserie, 5-course dinner</span></div>
+      <div class="detail-row"><span class="detail-label">Includes</span><span class="detail-value">70 hrs/week childcare, 60 hrs/week baby care, pools, sports programme, pony rides, and more</span></div>
+      <div class="detail-row"><span class="detail-label">Contact</span><span class="detail-value">info@sonnwies.com · +39 0472 413533</span></div>
+    </div>
+    <div class="card-note">Mountain hikes, pools, award-winning family resort — the perfect wind-down.</div>
+  </div>
+
+  <div class="transit">
+    <div class="transit-line"></div>
+    <span class="transit-text">Drive to Munich Airport · ~2h 30min · rental car drop-off</span>
+  </div>
+
+  <!-- 9. MUNICH -->
+  <div id="munich">
+    <h2 class="section-heading">Munich — departure</h2>
+    <div class="section-sub">Leg 9  ·  1 night  ·  Jul 14–15</div>
+  </div>
+
+  <div class="card" style="animation-delay:0.45s">
+    <div class="card-header">
+      <div class="card-header-left">
+        <div class="card-title">Hilton Munich Airport</div>
+        <div class="card-dates">Tuesday 14 July – Wednesday 15 July</div>
+      </div>
+      <span class="badge badge-booked">Booked</span>
+    </div>
+    <div class="card-body">
+      <div class="detail-row"><span class="detail-label">Ref</span><span class="detail-value">#3419761066</span></div>
+      <div class="detail-row"><span class="detail-label">Rooms</span><span class="detail-value">Family Connecting Rooms (2 adults, 2 children + cot confirmed)</span></div>
+      <div class="detail-row"><span class="detail-label">Breakfast</span><span class="detail-value">Not included</span></div>
+      <div class="detail-row"><span class="detail-label">Cancellation</span><span class="detail-value">Free cancellation until 11:59 PM on 13 July</span></div>
+      <div class="detail-row"><span class="detail-label">Contact</span><span class="detail-value">info.munichairport@hilton.com · +49 89 978 20</span></div>
+    </div>
+    <div class="card-note">Easy airport departure the next morning — fly home on QR 060 at 10:00 AM.</div>
+  </div>
+
+  <!-- TRANSPORT -->
+  <div id="transport" class="open-items">
+    <h2 class="section-heading" style="margin-top:0">Transport</h2>
+    <div class="section-sub">Trains, flights, and rental car</div>
+
+    <div class="info-card">
+      <div class="info-card-title">OUIGO train — Disneyland to Provence</div>
+      <div class="detail-row"><span class="detail-label">Service</span><span class="detail-value">OUIGO Grande Vitesse 7841</span></div>
+      <div class="detail-row"><span class="detail-label">Date</span><span class="detail-value">Sunday 21 June 2026</span></div>
+      <div class="detail-row"><span class="detail-label">Route</span><span class="detail-value">Paris Marne-la-Vallée–Chessy → Avignon TGV</span></div>
+      <div class="detail-row"><span class="detail-label">Departs</span><span class="detail-value">12:50 PM → arrives 3:27 PM</span></div>
+      <div class="detail-row"><span class="detail-label">Passengers</span><span class="detail-value">5 passengers · €221.50 total (incl. travel insurance)</span></div>
+      <div class="detail-row"><span class="detail-label">Seats</span><span class="detail-value">819, 820, 823, 824 — Coach 8, nursery area (5th ticket: infant on lap)</span></div>
+    </div>
+
+    <div class="info-card">
+      <div class="info-card-title">Rental car — Avignon to Munich</div>
+      <div class="detail-row"><span class="detail-label">Booking</span><span class="detail-value">#9733198850</span></div>
+      <div class="detail-row"><span class="detail-label">Vehicle</span><span class="detail-value">Mercedes-Benz E-Class Estate (or similar wagon) · automatic · 5 seats · 4 bags</span></div>
+      <div class="detail-row"><span class="detail-label">Child seats</span><span class="detail-value">3 child seats included (for all three kids)</span></div>
+      <div class="detail-row"><span class="detail-label">Pickup</span><span class="detail-value">Avignon Train Station TGV, Place de l'Europe, 84000 Avignon — Jun 21, 3:30 PM</span></div>
+      <div class="detail-row"><span class="detail-label">Return</span><span class="detail-value">Munich Airport — Jul 14, 3:00 PM</span></div>
+      <div class="detail-row"><span class="detail-label">Route</span><span class="detail-value">France → Italy → Germany (cross-border)</span></div>
+      <div class="detail-row"><span class="detail-label">Protection</span><span class="detail-value">24/7 breakdown assistance · third-party insurance · deductible up to €5,000</span></div>
+    </div>
+
+    <div class="info-card">
+      <div class="info-card-title">Flights — Qatar Airways</div>
+      <div class="detail-row"><span class="detail-label">PNR</span><span class="detail-value">8IN2YI · Business class</span></div>
+      <div class="detail-row"><span class="detail-label">Outbound</span><span class="detail-value">Sat 13 Jun: MEL → DOH (QR 905) → CDG (QR 043), arriving 15:20 Sun 14 Jun</span></div>
+      <div class="detail-row"><span class="detail-label">Return</span><span class="detail-value">Wed 15 Jul: MUC → DOH (QR 060, dep 10:00) → MEL (QR 904, arr Thu 16 Jul 16:50)</span></div>
+      <div class="detail-row"><span class="detail-label">Note</span><span class="detail-value">Flights affected by Middle East airspace situation — routing and schedule may change. Baby lap infant ticket still to be added once born.</span></div>
+    </div>
+  </div>
+
+  <!-- STILL TO DO -->
+  <div class="open-items">
+    <h2 class="section-heading" style="margin-top:0">Still to do</h2>
+    <div class="todo-item">
+      <div class="todo-dot"></div>
+      <div class="todo-text">Flights: verify Qatar Airways routing and confirm flights are intact (PNR 8IN2YI)</div>
+    </div>
+    <div class="todo-item">
+      <div class="todo-dot"></div>
+      <div class="todo-text">Baby: add lap infant to QR booking once name, DOB, and passport are available</div>
+    </div>
+    <div class="todo-item">
+      <div class="todo-dot"></div>
+      <div class="todo-text">CDG airport transfer: book private minivan from CDG to Hôtel du Sentier</div>
+    </div>
+    <div class="todo-item">
+      <div class="todo-dot"></div>
+      <div class="todo-text">Paris to Disneyland: book train or shuttle (~45 min)</div>
+    </div>
+    <div class="todo-item">
+      <div class="todo-dot"></div>
+      <div class="todo-text">Bea's birthday: plan celebration for 8 July at Lake Como</div>
+    </div>
+  </div>
+
+</div>
+
+<!-- FOOTER -->
+<div class="footer">
+  Last updated: 25 April 2026 · Crowley-Bishop European summer 2026
+</div>
+
+<script>
+  // Itinerary nav: highlight active section on scroll
+  const navDots = document.querySelectorAll('.nav-dot');
+  const sections = [];
+  navDots.forEach(dot => {
+    const target = document.querySelector(dot.getAttribute('href'));
+    if (target) sections.push({ el: target, dot });
+  });
+
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        navDots.forEach(d => d.classList.remove('active'));
+        const match = sections.find(s => s.el === entry.target);
+        if (match) {
+          match.dot.classList.add('active');
+          match.dot.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+        }
+      }
+    });
+  }, { rootMargin: '-96px 0px -65% 0px', threshold: 0.1 });
+
+  sections.forEach(s => observer.observe(s.el));
+
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('/sw.js').catch(() => {});
+  }
+</script>
+
+</body>
+</html>

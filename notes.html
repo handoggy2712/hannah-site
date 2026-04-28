@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>Notes — Hannah</title>
+  <link rel="manifest" href="/manifest.json">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="apple-mobile-web-app-title" content="Hannah">
+  <meta name="theme-color" content="#FDFCFA">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+  <style>
+    /* ---- Page header ---- */
+    .page-header {
+      max-width: 480px;
+      margin: 0 auto;
+      padding: 32px 24px 22px;
+      animation: fadeUp 0.6s ease both;
+    }
+    .page-title {
+      font-family: var(--font-heading);
+      font-weight: 500;
+      font-size: 26px;
+      color: var(--title);
+      letter-spacing: -0.4px;
+      margin-bottom: 4px;
+    }
+    .page-subtitle {
+      font-family: var(--font-heading);
+      font-size: 13px;
+      font-weight: 300;
+      color: var(--subtitle);
+    }
+    .page-divider {
+      height: 1px;
+      background: var(--divider);
+      margin: 20px 0 0;
+    }
+
+    /* ---- Notes list ---- */
+    .notes-wrap {
+      max-width: 480px;
+      margin: 0 auto;
+      padding: 20px 24px 100px;
+    }
+
+    .note-card {
+      background: #fff;
+      border: 1px solid var(--divider);
+      border-radius: 14px;
+      padding: 16px 18px;
+      margin-bottom: 10px;
+      cursor: pointer;
+      -webkit-tap-highlight-color: transparent;
+      animation: fadeUp 0.5s ease both;
+      transition: transform 0.12s ease;
+    }
+    .note-card:active { transform: scale(0.97); }
+
+    .note-card-title {
+      font-family: var(--font-heading);
+      font-size: 15px;
+      font-weight: 500;
+      color: var(--title);
+      margin-bottom: 4px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .note-card-preview {
+      font-size: 13px;
+      color: var(--subtitle);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      margin-bottom: 8px;
+    }
+
+    .note-card-date {
+      font-family: var(--font-heading);
+      font-size: 11px;
+      font-weight: 300;
+      color: var(--divider);
+    }
+
+    .empty-state {
+      text-align: center;
+      padding: 60px 24px;
+      animation: fadeUp 0.6s ease both;
+    }
+    .empty-icon { font-size: 36px; margin-bottom: 12px; }
+    .empty-text {
+      font-family: var(--font-heading);
+      font-size: 14px;
+      font-weight: 300;
+      color: var(--subtitle);
+      line-height: 1.7;
+    }
+
+    /* ---- Add button (floating) ---- */
+    .add-btn {
+      position: fixed;
+      bottom: calc(28px + env(safe-area-inset-bottom, 0px));
+      right: 24px;
+      width: 56px;
+      height: 56px;
+      border-radius: 50%;
+      background: var(--accent-warm);
+      border: none;
+      color: #fff;
+      font-size: 26px;
+      line-height: 1;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 4px 18px rgba(196, 168, 130, 0.45);
+      transition: transform 0.15s ease;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .add-btn:active { transform: scale(0.92); }
+
+    /* ---- Edit view ---- */
+    .edit-view {
+      display: none;
+      max-width: 480px;
+      margin: 0 auto;
+    }
+    .edit-view.visible { display: block; }
+
+    .edit-toolbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 16px 24px 12px;
+      max-width: 480px;
+      margin: 0 auto;
+    }
+
+    .edit-back {
+      font-family: var(--font-heading);
+      font-size: 14px;
+      font-weight: 400;
+      color: var(--accent-warm);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      padding: 6px 0;
+      -webkit-tap-highlight-color: transparent;
+      background: none;
+      border: none;
+    }
+    .edit-back svg {
+      width: 9px; height: 15px;
+      stroke: var(--accent-warm);
+      fill: none;
+      stroke-width: 2;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    .edit-delete {
+      font-family: var(--font-heading);
+      font-size: 13px;
+      font-weight: 400;
+      color: #C4887A;
+      cursor: pointer;
+      padding: 6px 0;
+      background: none;
+      border: none;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    .edit-area-wrap {
+      padding: 8px 24px 120px;
+    }
+
+    .note-textarea {
+      width: 100%;
+      min-height: 65vh;
+      border: none;
+      outline: none;
+      resize: none;
+      background: transparent;
+      font-family: var(--font-body);
+      font-size: 15px;
+      font-weight: 300;
+      color: var(--title);
+      line-height: 1.85;
+      caret-color: var(--accent-warm);
+    }
+
+    .note-textarea::placeholder {
+      color: var(--divider);
+    }
+
+    .edit-meta {
+      font-family: var(--font-heading);
+      font-size: 11px;
+      font-weight: 300;
+      color: var(--divider);
+      padding: 0 24px 12px;
+      max-width: 480px;
+      margin: 0 auto;
+    }
+
+    /* ---- List/edit toggle ---- */
+    .list-view { display: block; }
+    .list-view.hidden { display: none; }
+  </style>
+</head>
+<body>
+
+<!-- Site nav (updates dynamically) -->
+<nav class="site-nav" id="site-nav">
+  <a class="site-nav-back" href="index.html">
+    <svg viewBox="0 0 9 15"><polyline points="8,1 1,7.5 8,14"/></svg>
+    Home
+  </a>
+  <span class="site-nav-title">Notes</span>
+</nav>
+
+<!-- LIST VIEW -->
+<div class="list-view" id="list-view">
+
+  <div class="page-header">
+    <div class="page-title">Notes</div>
+    <div class="page-subtitle">Things to remember</div>
+    <div class="page-divider"></div>
+  </div>
+
+  <div class="notes-wrap" id="notes-list">
+    <!-- notes rendered here by JS -->
+  </div>
+
+  <button class="add-btn" id="add-btn" title="New note">+</button>
+
+</div>
+
+<!-- EDIT VIEW -->
+<div class="edit-view" id="edit-view">
+
+  <div class="edit-toolbar">
+    <button class="edit-back" id="edit-back">
+      <svg viewBox="0 0 9 15"><polyline points="8,1 1,7.5 8,14"/></svg>
+      Notes
+    </button>
+    <button class="edit-delete" id="edit-delete">Delete</button>
+  </div>
+
+  <div class="edit-meta" id="edit-meta"></div>
+
+  <div class="edit-area-wrap">
+    <textarea class="note-textarea" id="note-textarea" placeholder="Start typing…"></textarea>
+  </div>
+
+</div>
+
+<script>
+  const STORE_KEY = 'hannah-notes';
+  let notes = [];
+  let activeId = null;
+  let saveTimer = null;
+
+  function load() {
+    try { notes = JSON.parse(localStorage.getItem(STORE_KEY)) || []; }
+    catch { notes = []; }
+  }
+
+  function save() {
+    localStorage.setItem(STORE_KEY, JSON.stringify(notes));
+  }
+
+  function formatDate(iso) {
+    const d = new Date(iso);
+    return d.toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' });
+  }
+
+  function noteTitle(body) {
+    const firstLine = (body || '').split('\n')[0].trim();
+    return firstLine || 'Untitled note';
+  }
+
+  function notePreview(body) {
+    const lines = (body || '').split('\n').filter(l => l.trim());
+    const preview = lines.slice(1).join(' ').trim();
+    return preview || '—';
+  }
+
+  function renderList() {
+    const wrap = document.getElementById('notes-list');
+    if (notes.length === 0) {
+      wrap.innerHTML = `
+        <div class="empty-state">
+          <div class="empty-icon">📝</div>
+          <div class="empty-text">No notes yet.<br>Tap + to write your first one.</div>
+        </div>`;
+      return;
+    }
+    const sorted = [...notes].sort((a, b) => new Date(b.modified) - new Date(a.modified));
+    wrap.innerHTML = sorted.map((n, i) => `
+      <div class="note-card" data-id="${n.id}" style="animation-delay:${i * 0.04}s">
+        <div class="note-card-title">${escHtml(noteTitle(n.body))}</div>
+        <div class="note-card-preview">${escHtml(notePreview(n.body))}</div>
+        <div class="note-card-date">${formatDate(n.modified)}</div>
+      </div>`).join('');
+    wrap.querySelectorAll('.note-card').forEach(el => {
+      el.addEventListener('click', () => openNote(el.dataset.id));
+    });
+  }
+
+  function escHtml(s) {
+    return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+  }
+
+  function openNote(id) {
+    activeId = id;
+    const note = notes.find(n => n.id === id);
+    if (!note) return;
+    document.getElementById('note-textarea').value = note.body;
+    document.getElementById('edit-meta').textContent = `Last edited ${formatDate(note.modified)}`;
+    showEditView();
+  }
+
+  function newNote() {
+    const note = { id: Date.now().toString(), body: '', modified: new Date().toISOString() };
+    notes.unshift(note);
+    save();
+    activeId = note.id;
+    document.getElementById('note-textarea').value = '';
+    document.getElementById('edit-meta').textContent = 'Just now';
+    showEditView();
+    setTimeout(() => document.getElementById('note-textarea').focus(), 100);
+  }
+
+  function showEditView() {
+    document.getElementById('list-view').classList.add('hidden');
+    document.getElementById('edit-view').classList.add('visible');
+  }
+
+  function showListView() {
+    document.getElementById('edit-view').classList.remove('visible');
+    document.getElementById('list-view').classList.remove('hidden');
+    renderList();
+  }
+
+  function saveCurrentNote() {
+    if (!activeId) return;
+    const body = document.getElementById('note-textarea').value;
+    const note = notes.find(n => n.id === activeId);
+    if (note) {
+      note.body = body;
+      note.modified = new Date().toISOString();
+      save();
+    }
+  }
+
+  // Wire up events
+  document.getElementById('add-btn').addEventListener('click', newNote);
+
+  document.getElementById('edit-back').addEventListener('click', () => {
+    saveCurrentNote();
+    // Remove note if it was left empty
+    notes = notes.filter(n => n.id !== activeId || n.body.trim());
+    save();
+    activeId = null;
+    showListView();
+  });
+
+  document.getElementById('edit-delete').addEventListener('click', () => {
+    if (!activeId) return;
+    if (!confirm('Delete this note?')) return;
+    notes = notes.filter(n => n.id !== activeId);
+    save();
+    activeId = null;
+    showListView();
+  });
+
+  document.getElementById('note-textarea').addEventListener('input', () => {
+    clearTimeout(saveTimer);
+    saveTimer = setTimeout(saveCurrentNote, 600);
+  });
+
+  // Handle phone back gesture / browser back from edit view
+  window.addEventListener('popstate', () => {
+    if (document.getElementById('edit-view').classList.contains('visible')) {
+      saveCurrentNote();
+      notes = notes.filter(n => n.id !== activeId || n.body.trim());
+      save();
+      activeId = null;
+      showListView();
+    }
+  });
+
+  load();
+  renderList();
+
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('/sw.js').catch(() => {});
+  }
+</script>
+
+</body>
+</html>

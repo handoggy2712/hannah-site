@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>Holidays — Hannah</title>
+  <link rel="manifest" href="/manifest.json">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="apple-mobile-web-app-title" content="Hannah">
+  <meta name="theme-color" content="#FDFCFA">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+  <style>
+    .page-header {
+      max-width: 480px;
+      margin: 0 auto;
+      padding: 36px 24px 24px;
+      animation: fadeUp 0.6s ease both;
+    }
+
+    .page-title {
+      font-family: var(--font-heading);
+      font-weight: 500;
+      font-size: 26px;
+      color: var(--title);
+      letter-spacing: -0.4px;
+      margin-bottom: 4px;
+    }
+
+    .page-subtitle {
+      font-family: var(--font-heading);
+      font-size: 13px;
+      font-weight: 300;
+      color: var(--subtitle);
+    }
+
+    .page-divider {
+      height: 1px;
+      background: var(--divider);
+      margin: 20px 0 0;
+    }
+
+    /* ---- Trip list ---- */
+    .trips-wrap {
+      max-width: 480px;
+      margin: 0 auto;
+      padding: 24px 24px 60px;
+    }
+
+    .trips-label {
+      font-family: var(--font-heading);
+      font-size: 11px;
+      font-weight: 400;
+      color: var(--subtitle);
+      text-transform: uppercase;
+      letter-spacing: 0.9px;
+      margin-bottom: 16px;
+    }
+
+    .trip-card {
+      background: #fff;
+      border: 1px solid var(--divider);
+      border-radius: 16px;
+      padding: 20px 20px 18px;
+      text-decoration: none;
+      display: flex;
+      align-items: flex-start;
+      gap: 14px;
+      margin-bottom: 12px;
+      animation: fadeUp 0.6s ease both;
+      transition: transform 0.15s ease;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    .trip-card:active { transform: scale(0.97); }
+
+    .trip-flags {
+      font-size: 26px;
+      line-height: 1;
+      flex-shrink: 0;
+      padding-top: 2px;
+    }
+
+    .trip-info { flex: 1; }
+
+    .trip-name {
+      font-family: var(--font-heading);
+      font-size: 16px;
+      font-weight: 500;
+      color: var(--title);
+      letter-spacing: -0.2px;
+      margin-bottom: 4px;
+    }
+
+    .trip-dates {
+      font-family: var(--font-heading);
+      font-size: 12px;
+      font-weight: 300;
+      color: var(--subtitle);
+      margin-bottom: 10px;
+    }
+
+    .trip-stops {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+
+    .trip-stop {
+      font-family: var(--font-heading);
+      font-size: 11px;
+      font-weight: 400;
+      color: var(--callout-text);
+      background: var(--callout-bg);
+      padding: 3px 9px;
+      border-radius: 10px;
+    }
+
+    .trip-chevron {
+      flex-shrink: 0;
+      color: var(--subtitle);
+      font-size: 20px;
+      font-weight: 300;
+      padding-top: 2px;
+      align-self: center;
+    }
+
+    /* ---- Future trips placeholder ---- */
+    .add-trip {
+      max-width: 480px;
+      margin: 0 auto;
+      padding: 0 24px;
+      font-family: var(--font-heading);
+      font-size: 12px;
+      font-weight: 300;
+      color: var(--subtitle);
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+
+<!-- Site nav -->
+<nav class="site-nav">
+  <a class="site-nav-back" href="index.html">
+    <svg viewBox="0 0 9 15"><polyline points="8,1 1,7.5 8,14"/></svg>
+    Home
+  </a>
+  <span class="site-nav-title">Holidays</span>
+</nav>
+
+<!-- Page header -->
+<div class="page-header">
+  <div class="page-title">Holidays</div>
+  <div class="page-subtitle">Travel plans &amp; itineraries</div>
+  <div class="page-divider"></div>
+</div>
+
+<!-- Trip list -->
+<div class="trips-wrap">
+  <div class="trips-label">Upcoming</div>
+
+  <a class="trip-card" href="europe-2026.html">
+    <div class="trip-flags">🇫🇷🇮🇹</div>
+    <div class="trip-info">
+      <div class="trip-name">European Summer 2026</div>
+      <div class="trip-dates">14 June – 15 July · France, Italy &amp; Germany</div>
+      <div class="trip-stops">
+        <span class="trip-stop">Paris</span>
+        <span class="trip-stop">Disneyland</span>
+        <span class="trip-stop">Provence</span>
+        <span class="trip-stop">Nice</span>
+        <span class="trip-stop">Lake Como</span>
+        <span class="trip-stop">Dolomites</span>
+      </div>
+    </div>
+    <div class="trip-chevron">›</div>
+  </a>
+
+</div>
+
+<div class="add-trip">More trips will appear here as you add them.</div>
+
+<script>
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('/sw.js').catch(() => {});
+  }
+</script>
+
+</body>
+</html>

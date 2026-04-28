@@ -1,0 +1,19 @@
+{
+  "name": "Hannah",
+  "short_name": "Hannah",
+  "description": "My personal organiser",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#FDFCFA",
+  "theme_color": "#FDFCFA",
+  "icons": [
+    {
+      "src": "/icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}

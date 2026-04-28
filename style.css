@@ -1,0 +1,94 @@
+/* =============================================
+   Shared design tokens & layout — Hannah's site
+   ============================================= */
+
+:root {
+  --bg: #FDFCFA;
+  --title: #1F1F1F;
+  --body: #6A6560;
+  --subtitle: #B0A898;
+  --divider: #E8E3DB;
+  --callout-bg: #F6F3EE;
+  --callout-text: #5A5550;
+  --accent-warm: #C4A882;
+  --badge-booked: #7BA38E;
+  --badge-booked-bg: #EEF5F0;
+  --badge-action: #C4884A;
+  --badge-action-bg: #FBF3EB;
+  --font-heading: 'Sora', 'Calibri Light', sans-serif;
+  --font-body: 'DM Sans', 'Calibri', sans-serif;
+  --nav-height: 48px;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: var(--font-body);
+  font-weight: 300;
+  font-size: 15px;
+  color: var(--body);
+  background: var(--bg);
+  line-height: 1.78;
+  -webkit-font-smoothing: antialiased;
+  /* Push content below fixed nav + iPhone notch */
+  padding-top: calc(var(--nav-height) + env(safe-area-inset-top, 0px));
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+}
+
+/* ---- SITE NAV BAR (fixed, top of every page) ---- */
+.site-nav {
+  position: fixed;
+  top: env(safe-area-inset-top, 0px);
+  left: 0;
+  right: 0;
+  z-index: 300;
+  height: var(--nav-height);
+  background: rgba(253, 252, 250, 0.95);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border-bottom: 1px solid var(--divider);
+  display: flex;
+  align-items: center;
+  padding: 0 20px;
+  gap: 8px;
+}
+
+.site-nav-back {
+  font-family: var(--font-heading);
+  font-size: 14px;
+  font-weight: 400;
+  color: var(--accent-warm);
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 8px 8px 8px 0;
+  flex-shrink: 0;
+}
+
+.site-nav-back svg {
+  width: 9px;
+  height: 15px;
+  stroke: var(--accent-warm);
+  fill: none;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.site-nav-title {
+  font-family: var(--font-heading);
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--title);
+  flex: 1;
+  text-align: center;
+  padding-right: 60px; /* optical centre accounting for back link width */
+}
+
+/* ---- ANIMATIONS ---- */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(14px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
