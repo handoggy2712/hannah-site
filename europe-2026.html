@@ -248,6 +248,71 @@
     margin-bottom: 10px;
   }
 
+  /* --- TOP CHECKLIST CARD --- */
+  .checklist-card {
+    background: #F5C428;
+    border-radius: 20px;
+    padding: 20px 22px 14px;
+    margin-bottom: 40px;
+    animation: fadeUp 0.6s ease 0.05s both;
+  }
+  .checklist-card-title {
+    font-family: 'Abril Fatface', serif;
+    font-size: 22px;
+    color: var(--title);
+    letter-spacing: -0.5px;
+    margin-bottom: 14px;
+  }
+  .check-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 9px 0;
+    border-bottom: 1px solid rgba(26,18,8,0.1);
+    cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .check-item:last-child { border-bottom: none; }
+  .check-box {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    border: 2.5px solid rgba(26,18,8,0.35);
+    flex-shrink: 0;
+    margin-top: 1px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.15s ease;
+  }
+  .check-box::after {
+    content: '';
+    width: 6px;
+    height: 10px;
+    border-right: 2.5px solid #fff;
+    border-bottom: 2.5px solid #fff;
+    transform: rotate(45deg) translateY(-1px);
+    opacity: 0;
+    transition: opacity 0.15s ease;
+  }
+  .check-item.done .check-box {
+    background: var(--title);
+    border-color: var(--title);
+  }
+  .check-item.done .check-box::after { opacity: 1; }
+  .check-item.done .check-label {
+    text-decoration: line-through;
+    opacity: 0.45;
+  }
+  .check-label {
+    font-family: var(--font-heading);
+    font-size: 13px;
+    font-weight: 400;
+    color: var(--title);
+    line-height: 1.6;
+    flex: 1;
+  }
+
   /* --- TODO LIST --- */
   .open-items {
     margin-top: 40px;
@@ -313,7 +378,7 @@
   <h1>European summer 2026</h1>
   <div class="subtitle">
     14 June – 15 July  ·  France, Italy &amp; Germany<br>
-    Hannah &amp; Tom  ·  Bea (7), Lonnie (4), Baby (3mo)  ·  Tom's parents (Provence → wedding)<br>
+    Hannah &amp; Tom  ·  Bea (7), Lonnie (4), June (3mo)  ·  Tom's parents (Provence → wedding)<br>
     Rental car: Avignon TGV → Munich Airport
   </div>
   <div class="divider"></div>
@@ -336,6 +401,35 @@
 </nav>
 
 <div class="content">
+
+  <!-- TOP CHECKLIST -->
+  <div class="checklist-card">
+    <div class="checklist-card-title">Still to sort</div>
+    <div class="check-item" data-id="c1">
+      <div class="check-box"></div>
+      <span class="check-label">Flights: verify Qatar Airways routing and confirm flights are intact (PNR 8IN2YI)</span>
+    </div>
+    <div class="check-item" data-id="c2">
+      <div class="check-box"></div>
+      <span class="check-label">June: add lap infant to QR booking once passport is available</span>
+    </div>
+    <div class="check-item" data-id="c3">
+      <div class="check-box"></div>
+      <span class="check-label">CDG airport transfer: book private minivan from CDG to Hôtel du Sentier</span>
+    </div>
+    <div class="check-item" data-id="c4">
+      <div class="check-box"></div>
+      <span class="check-label">Paris to Disneyland: book train or shuttle (~45 min)</span>
+    </div>
+    <div class="check-item" data-id="c5">
+      <div class="check-box"></div>
+      <span class="check-label">Tom's birthday: plan celebration for 24 June in Provence</span>
+    </div>
+    <div class="check-item" data-id="c6">
+      <div class="check-box"></div>
+      <span class="check-label">Bea's birthday: plan celebration for 8 July at Lake Como</span>
+    </div>
+  </div>
 
   <!-- 1. PARIS -->
   <div id="paris">
@@ -420,6 +514,11 @@
       <div class="detail-row"><span class="detail-label">Contact</span><span class="detail-value">Sydney Jouffret, info@provenceholidays.com · +33 4 86 69 30 89</span></div>
     </div>
     <div class="card-note">Lavender fields, markets, château country — relaxed pace for the whole family.</div>
+  </div>
+
+  <div class="birthday-callout">
+    <div class="emoji">🎂</div>
+    <div class="text">Tom's birthday — 24 June — celebrate in Provence!</div>
   </div>
 
   <div class="transit">
@@ -638,7 +737,7 @@
       <div class="detail-row"><span class="detail-label">PNR</span><span class="detail-value">8IN2YI · Business class</span></div>
       <div class="detail-row"><span class="detail-label">Outbound</span><span class="detail-value">Sat 13 Jun: MEL → DOH (QR 905) → CDG (QR 043), arriving 15:20 Sun 14 Jun</span></div>
       <div class="detail-row"><span class="detail-label">Return</span><span class="detail-value">Wed 15 Jul: MUC → DOH (QR 060, dep 10:00) → MEL (QR 904, arr Thu 16 Jul 16:50)</span></div>
-      <div class="detail-row"><span class="detail-label">Note</span><span class="detail-value">Flights affected by Middle East airspace situation — routing and schedule may change. Baby lap infant ticket still to be added once born.</span></div>
+      <div class="detail-row"><span class="detail-label">Note</span><span class="detail-value">Flights affected by Middle East airspace situation — routing and schedule may change. June's lap infant ticket still to be added once passport is available.</span></div>
     </div>
   </div>
 
@@ -651,7 +750,7 @@
     </div>
     <div class="todo-item">
       <div class="todo-dot"></div>
-      <div class="todo-text">Baby: add lap infant to QR booking once name, DOB, and passport are available</div>
+      <div class="todo-text">June: add lap infant to QR booking once passport is available</div>
     </div>
     <div class="todo-item">
       <div class="todo-dot"></div>
@@ -697,6 +796,19 @@
   }, { rootMargin: '-96px 0px -65% 0px', threshold: 0.1 });
 
   sections.forEach(s => observer.observe(s.el));
+
+  // Checklist persistence
+  const CHECKS_KEY = 'hannah-europe-checks';
+  const savedChecks = JSON.parse(localStorage.getItem(CHECKS_KEY) || '{}');
+  document.querySelectorAll('.check-item').forEach(item => {
+    const id = item.dataset.id;
+    if (savedChecks[id]) item.classList.add('done');
+    item.addEventListener('click', () => {
+      item.classList.toggle('done');
+      savedChecks[id] = item.classList.contains('done');
+      localStorage.setItem(CHECKS_KEY, JSON.stringify(savedChecks));
+    });
+  });
 
   if ('serviceWorker' in navigator) {
     navigator.serviceWorker.register('/sw.js').catch(() => {});
