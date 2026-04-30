@@ -10,7 +10,7 @@
   <meta name="apple-mobile-web-app-title" content="Hannah">
   <meta name="theme-color" content="#FDFCFA">
   <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Abril+Fatface&family=Space+Grotesk:wght@400;500;600;700&family=DM+Sans:opsz,wght@9..40,300;9..40,400&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
   <style>
     /* ---- Page header ---- */
@@ -21,18 +21,21 @@
       animation: fadeUp 0.6s ease both;
     }
     .page-title {
-      font-family: var(--font-heading);
-      font-weight: 500;
-      font-size: 26px;
-      color: var(--title);
-      letter-spacing: -0.4px;
-      margin-bottom: 4px;
+      font-family: 'Abril Fatface', serif;
+      font-weight: 400;
+      font-size: 64px;
+      color: var(--accent-warm);
+      letter-spacing: -2px;
+      line-height: 0.9;
+      margin-bottom: 10px;
     }
     .page-subtitle {
       font-family: var(--font-heading);
-      font-size: 13px;
-      font-weight: 300;
+      font-size: 12px;
+      font-weight: 400;
       color: var(--subtitle);
+      text-transform: uppercase;
+      letter-spacing: 0.6px;
     }
     .page-divider {
       height: 1px;
@@ -48,9 +51,7 @@
     }
 
     .note-card {
-      background: #fff;
-      border: 1px solid var(--divider);
-      border-radius: 14px;
+      border-radius: 18px;
       padding: 16px 18px;
       margin-bottom: 10px;
       cursor: pointer;
@@ -59,33 +60,40 @@
       transition: transform 0.12s ease;
     }
     .note-card:active { transform: scale(0.97); }
+    .note-card-blue  { background: #5A96E0; }
+    .note-card-coral { background: #E86448; }
+    .note-card-yellow { background: #F5C428; }
+    .note-card-teal  { background: #4CBAA4; }
 
     .note-card-title {
       font-family: var(--font-heading);
       font-size: 15px;
-      font-weight: 500;
-      color: var(--title);
+      font-weight: 600;
+      color: #fff;
       margin-bottom: 4px;
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
     }
+    .note-card-yellow .note-card-title { color: var(--title); }
 
     .note-card-preview {
       font-size: 13px;
-      color: var(--subtitle);
+      color: rgba(255,255,255,0.75);
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
       margin-bottom: 8px;
     }
+    .note-card-yellow .note-card-preview { color: rgba(26,18,8,0.6); }
 
     .note-card-date {
       font-family: var(--font-heading);
       font-size: 11px;
-      font-weight: 300;
-      color: var(--divider);
+      font-weight: 400;
+      color: rgba(255,255,255,0.5);
     }
+    .note-card-yellow .note-card-date { color: rgba(26,18,8,0.4); }
 
     .empty-state {
       text-align: center;
@@ -302,9 +310,10 @@
         </div>`;
       return;
     }
+    const COLOURS = ['blue', 'coral', 'yellow', 'teal'];
     const sorted = [...notes].sort((a, b) => new Date(b.modified) - new Date(a.modified));
     wrap.innerHTML = sorted.map((n, i) => `
-      <div class="note-card" data-id="${n.id}" style="animation-delay:${i * 0.04}s">
+      <div class="note-card note-card-${COLOURS[i % 4]}" data-id="${n.id}" style="animation-delay:${i * 0.04}s">
         <div class="note-card-title">${escHtml(noteTitle(n.body))}</div>
         <div class="note-card-preview">${escHtml(notePreview(n.body))}</div>
         <div class="note-card-date">${formatDate(n.modified)}</div>

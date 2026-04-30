@@ -3,20 +3,21 @@
    ============================================= */
 
 :root {
-  --bg: #FDFCFA;
-  --title: #1F1F1F;
-  --body: #6A6560;
-  --subtitle: #B0A898;
-  --divider: #E8E3DB;
-  --callout-bg: #F6F3EE;
-  --callout-text: #5A5550;
-  --accent-warm: #C4A882;
-  --badge-booked: #7BA38E;
-  --badge-booked-bg: #EEF5F0;
-  --badge-action: #C4884A;
-  --badge-action-bg: #FBF3EB;
-  --font-heading: 'Sora', 'Calibri Light', sans-serif;
+  --bg: #FAF4E8;
+  --title: #1A1208;
+  --body: #5A4840;
+  --subtitle: #A08860;
+  --divider: #E4CCA8;
+  --callout-bg: #F2E8D4;
+  --callout-text: #5A4438;
+  --accent-warm: #C82820;
+  --badge-booked: #3A7A50;
+  --badge-booked-bg: #D8F0E4;
+  --badge-action: #B07010;
+  --badge-action-bg: #FBF0D8;
+  --font-heading: 'Space Grotesk', 'Calibri', sans-serif;
   --font-body: 'DM Sans', 'Calibri', sans-serif;
+  --font-display: 'Space Grotesk', sans-serif;
   --nav-height: 48px;
 }
 
@@ -31,7 +32,6 @@ body {
   background: var(--bg);
   line-height: 1.78;
   -webkit-font-smoothing: antialiased;
-  /* Push content below fixed nav + iPhone notch */
   padding-top: calc(var(--nav-height) + env(safe-area-inset-top, 0px));
   padding-bottom: env(safe-area-inset-bottom, 0px);
 }
@@ -44,7 +44,7 @@ body {
   right: 0;
   z-index: 300;
   height: var(--nav-height);
-  background: rgba(253, 252, 250, 0.95);
+  background: rgba(250, 244, 232, 0.95);
   backdrop-filter: blur(14px);
   -webkit-backdrop-filter: blur(14px);
   border-bottom: 1px solid var(--divider);
@@ -84,7 +84,7 @@ body {
   color: var(--title);
   flex: 1;
   text-align: center;
-  padding-right: 60px; /* optical centre accounting for back link width */
+  padding-right: 60px;
 }
 
 /* ---- ANIMATIONS ---- */
