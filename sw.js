@@ -1,4 +1,4 @@
-const CACHE = 'hannah-v4';
+const CACHE = 'hannah-v5';
 const URLS = [
   '/',
   '/index.html',
@@ -6,6 +6,7 @@ const URLS = [
   '/europe-2026.html',
   '/notes.html',
   '/calendar.html',
+  '/todo.html',
   '/style.css',
   '/icon.svg',
   '/manifest.json',

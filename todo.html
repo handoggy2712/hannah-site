@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>To-do — Hannah</title>
+  <link rel="manifest" href="/manifest.json">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="apple-mobile-web-app-title" content="Hannah">
+  <meta name="theme-color" content="#FAF4E8">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Abril+Fatface&family=Space+Grotesk:wght@400;500;600;700&family=DM+Sans:opsz,wght@9..40,300;9..40,400&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+  <style>
+    .page-header {
+      max-width: 480px;
+      margin: 0 auto;
+      padding: 32px 24px 22px;
+      animation: fadeUp 0.6s ease both;
+    }
+    .page-title {
+      font-family: 'Abril Fatface', serif;
+      font-weight: 400;
+      font-size: 64px;
+      color: #E86448;
+      letter-spacing: -2px;
+      line-height: 0.9;
+      margin-bottom: 10px;
+    }
+    .page-subtitle {
+      font-family: var(--font-heading);
+      font-size: 12px;
+      font-weight: 400;
+      color: var(--subtitle);
+      text-transform: uppercase;
+      letter-spacing: 0.6px;
+    }
+    .page-divider {
+      height: 1px;
+      background: var(--divider);
+      margin: 20px 0 0;
+    }
+
+    /* ---- Sections ---- */
+    .todo-wrap {
+      max-width: 480px;
+      margin: 0 auto;
+      padding: 28px 24px 100px;
+    }
+
+    .todo-section {
+      margin-bottom: 36px;
+      animation: fadeUp 0.5s ease both;
+    }
+    .todo-section:nth-child(2) { animation-delay: 0.06s; }
+
+    .section-label {
+      font-family: var(--font-heading);
+      font-size: 10px;
+      font-weight: 600;
+      color: var(--subtitle);
+      text-transform: uppercase;
+      letter-spacing: 1.4px;
+      margin-bottom: 10px;
+    }
+
+    /* ---- Task rows ---- */
+    .task-row {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 11px 14px 11px 12px;
+      background: var(--callout-bg);
+      border-radius: 14px;
+      margin-bottom: 6px;
+      transition: opacity 0.2s ease;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    .task-check {
+      width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      border: 2px solid var(--divider);
+      flex-shrink: 0;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: border-color 0.15s ease, background 0.15s ease;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .task-check.done {
+      border-color: #E86448;
+      background: #E86448;
+    }
+    .task-check.done::after {
+      content: '';
+      width: 5px;
+      height: 9px;
+      border: 2px solid #fff;
+      border-top: none;
+      border-left: none;
+      transform: rotate(45deg) translateY(-1px);
+      display: block;
+    }
+
+    .task-text {
+      font-family: var(--font-heading);
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--title);
+      flex: 1;
+      min-width: 0;
+      line-height: 1.4;
+      word-break: break-word;
+      cursor: pointer;
+    }
+    .task-text.done {
+      color: var(--subtitle);
+      text-decoration: line-through;
+      text-decoration-color: var(--divider);
+    }
+
+    .task-delete {
+      width: 28px;
+      height: 28px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      flex-shrink: 0;
+      opacity: 0;
+      transition: opacity 0.15s ease;
+      -webkit-tap-highlight-color: transparent;
+      background: none;
+      border: none;
+      color: var(--subtitle);
+      font-size: 18px;
+      line-height: 1;
+      border-radius: 50%;
+    }
+    .task-row:hover .task-delete,
+    .task-row.show-delete .task-delete {
+      opacity: 1;
+    }
+
+    /* ---- Add task row ---- */
+    .add-row {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 10px 14px 10px 12px;
+      cursor: pointer;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    .add-plus {
+      width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      border: 2px dashed var(--divider);
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--subtitle);
+      font-size: 16px;
+      line-height: 1;
+      font-weight: 300;
+    }
+
+    .add-label {
+      font-family: var(--font-heading);
+      font-size: 14px;
+      font-weight: 400;
+      color: var(--subtitle);
+    }
+
+    /* ---- Inline input ---- */
+    .add-input-row {
+      display: none;
+      align-items: center;
+      gap: 12px;
+      padding: 8px 14px 8px 12px;
+      background: var(--callout-bg);
+      border-radius: 14px;
+      margin-bottom: 6px;
+    }
+    .add-input-row.visible { display: flex; }
+
+    .add-input-dot {
+      width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      border: 2px solid var(--divider);
+      flex-shrink: 0;
+    }
+
+    .add-input {
+      flex: 1;
+      border: none;
+      outline: none;
+      background: transparent;
+      font-family: var(--font-heading);
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--title);
+      caret-color: #E86448;
+    }
+    .add-input::placeholder { color: var(--divider); }
+
+    /* ---- Clear completed ---- */
+    .clear-btn {
+      font-family: var(--font-heading);
+      font-size: 11px;
+      font-weight: 400;
+      color: var(--subtitle);
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 6px 0 0;
+      -webkit-tap-highlight-color: transparent;
+      display: none;
+    }
+    .clear-btn.visible { display: block; }
+  </style>
+</head>
+<body>
+
+<nav class="site-nav">
+  <a class="site-nav-back" href="index.html">
+    <svg viewBox="0 0 9 15"><polyline points="8,1 1,7.5 8,14"/></svg>
+    Home
+  </a>
+  <span class="site-nav-title">To-do</span>
+</nav>
+
+<div class="page-header">
+  <div class="page-title">To-do</div>
+  <div class="page-subtitle">Get things done</div>
+  <div class="page-divider"></div>
+</div>
+
+<div class="todo-wrap">
+
+  <!-- TODAY -->
+  <div class="todo-section">
+    <div class="section-label">Today</div>
+    <div class="task-list" id="list-today"></div>
+    <div class="add-input-row" id="input-today">
+      <div class="add-input-dot"></div>
+      <input class="add-input" type="text" placeholder="New task…" data-section="today">
+    </div>
+    <div class="add-row" id="add-today">
+      <div class="add-plus">+</div>
+      <span class="add-label">Add a task</span>
+    </div>
+    <button class="clear-btn" id="clear-today">Clear completed</button>
+  </div>
+
+  <!-- LONGER TERM -->
+  <div class="todo-section">
+    <div class="section-label">Longer term</div>
+    <div class="task-list" id="list-later"></div>
+    <div class="add-input-row" id="input-later">
+      <div class="add-input-dot"></div>
+      <input class="add-input" type="text" placeholder="New task…" data-section="later">
+    </div>
+    <div class="add-row" id="add-later">
+      <div class="add-plus">+</div>
+      <span class="add-label">Add a task</span>
+    </div>
+    <button class="clear-btn" id="clear-later">Clear completed</button>
+  </div>
+
+</div>
+
+<script>
+  const STORE_KEY = 'hannah-todos';
+  let data = { today: [], later: [] };
+
+  function load() {
+    try { data = JSON.parse(localStorage.getItem(STORE_KEY)) || { today: [], later: [] }; }
+    catch { data = { today: [], later: [] }; }
+    if (!data.today) data.today = [];
+    if (!data.later) data.later = [];
+  }
+
+  function save() {
+    localStorage.setItem(STORE_KEY, JSON.stringify(data));
+  }
+
+  function escHtml(s) {
+    return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+  }
+
+  function renderSection(section) {
+    const list = document.getElementById(`list-${section}`);
+    const clearBtn = document.getElementById(`clear-${section}`);
+    const tasks = data[section];
+
+    list.innerHTML = tasks.map(t => `
+      <div class="task-row" data-id="${t.id}" data-section="${section}">
+        <div class="task-check ${t.done ? 'done' : ''}" data-action="toggle"></div>
+        <span class="task-text ${t.done ? 'done' : ''}" data-action="toggle">${escHtml(t.text)}</span>
+        <button class="task-delete" data-action="delete" aria-label="Delete">×</button>
+      </div>`).join('');
+
+    const hasDone = tasks.some(t => t.done);
+    clearBtn.classList.toggle('visible', hasDone);
+  }
+
+  function render() {
+    renderSection('today');
+    renderSection('later');
+  }
+
+  function addTask(section, text) {
+    const trimmed = text.trim();
+    if (!trimmed) return;
+    data[section].push({ id: Date.now().toString(), text: trimmed, done: false });
+    save();
+    renderSection(section);
+  }
+
+  function toggleTask(section, id) {
+    const task = data[section].find(t => t.id === id);
+    if (task) { task.done = !task.done; save(); renderSection(section); }
+  }
+
+  function deleteTask(section, id) {
+    data[section] = data[section].filter(t => t.id !== id);
+    save();
+    renderSection(section);
+  }
+
+  function clearDone(section) {
+    data[section] = data[section].filter(t => !t.done);
+    save();
+    renderSection(section);
+  }
+
+  function showInput(section) {
+    document.getElementById(`add-${section}`).style.display = 'none';
+    const row = document.getElementById(`input-${section}`);
+    row.classList.add('visible');
+    row.querySelector('input').focus();
+  }
+
+  function hideInput(section) {
+    document.getElementById(`input-${section}`).classList.remove('visible');
+    document.getElementById(`input-${section}`).querySelector('input').value = '';
+    document.getElementById(`add-${section}`).style.display = '';
+  }
+
+  // Wire up add buttons
+  ['today', 'later'].forEach(section => {
+    document.getElementById(`add-${section}`).addEventListener('click', () => showInput(section));
+    document.getElementById(`clear-${section}`).addEventListener('click', () => clearDone(section));
+
+    const input = document.querySelector(`#input-${section} input`);
+    input.addEventListener('keydown', e => {
+      if (e.key === 'Enter') {
+        addTask(section, input.value);
+        input.value = '';
+        input.focus();
+      }
+      if (e.key === 'Escape') hideInput(section);
+    });
+    input.addEventListener('blur', () => {
+      if (!input.value.trim()) hideInput(section);
+      else { addTask(section, input.value); hideInput(section); }
+    });
+  });
+
+  // Wire up task actions (delegated)
+  document.querySelector('.todo-wrap').addEventListener('click', e => {
+    const row = e.target.closest('.task-row');
+    if (!row) return;
+    const action = e.target.dataset.action || e.target.closest('[data-action]')?.dataset.action;
+    const section = row.dataset.section;
+    const id = row.dataset.id;
+    if (action === 'toggle') toggleTask(section, id);
+    if (action === 'delete') deleteTask(section, id);
+  });
+
+  // Show delete button on touch hold (mobile)
+  document.querySelector('.todo-wrap').addEventListener('touchstart', e => {
+    const row = e.target.closest('.task-row');
+    if (!row || e.target.dataset.action) return;
+    const timer = setTimeout(() => row.classList.add('show-delete'), 400);
+    row.addEventListener('touchend', () => clearTimeout(timer), { once: true });
+    row.addEventListener('touchmove', () => clearTimeout(timer), { once: true });
+  });
+
+  load();
+  render();
+
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('/sw.js').catch(() => {});
+  }
+</script>
+
+</body>
+</html>
