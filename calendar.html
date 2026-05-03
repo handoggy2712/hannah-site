@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>Calendar — Hannah</title>
+  <link rel="manifest" href="/manifest.json">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="apple-mobile-web-app-title" content="Hannah">
+  <meta name="theme-color" content="#FAF4E8">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Abril+Fatface&family=Space+Grotesk:wght@400;500;600;700&family=DM+Sans:opsz,wght@9..40,300;9..40,400&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+  <style>
+    .page-header {
+      max-width: 480px;
+      margin: 0 auto;
+      padding: 32px 24px 22px;
+      animation: fadeUp 0.6s ease both;
+    }
+    .page-title {
+      font-family: 'Abril Fatface', serif;
+      font-weight: 400;
+      font-size: 64px;
+      color: #4CBAA4;
+      letter-spacing: -2px;
+      line-height: 0.9;
+      margin-bottom: 10px;
+    }
+    .page-subtitle {
+      font-family: var(--font-heading);
+      font-size: 12px;
+      font-weight: 400;
+      color: var(--subtitle);
+      text-transform: uppercase;
+      letter-spacing: 0.6px;
+    }
+    .page-divider {
+      height: 1px;
+      background: var(--divider);
+      margin: 20px 0 0;
+    }
+
+    /* ---- Events list ---- */
+    .events-wrap {
+      max-width: 480px;
+      margin: 0 auto;
+      padding: 24px 24px 80px;
+    }
+
+    .date-group {
+      margin-bottom: 24px;
+      animation: fadeUp 0.5s ease both;
+    }
+
+    .date-header {
+      display: flex;
+      align-items: baseline;
+      gap: 10px;
+      margin-bottom: 8px;
+    }
+
+    .date-str {
+      font-family: var(--font-heading);
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--subtitle);
+      letter-spacing: 1.2px;
+      text-transform: uppercase;
+    }
+
+    .date-rel {
+      font-family: var(--font-heading);
+      font-size: 11px;
+      font-weight: 400;
+      color: #4CBAA4;
+      text-transform: lowercase;
+    }
+
+    .event-row {
+      display: flex;
+      align-items: center;
+      padding: 12px 16px;
+      background: var(--callout-bg);
+      border-radius: 14px;
+      margin-bottom: 6px;
+      gap: 12px;
+    }
+
+    .event-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: #4CBAA4;
+      flex-shrink: 0;
+    }
+
+    .event-name {
+      font-family: var(--font-heading);
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--title);
+      flex: 1;
+      min-width: 0;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .event-time {
+      font-family: var(--font-heading);
+      font-size: 12px;
+      font-weight: 400;
+      color: var(--subtitle);
+      flex-shrink: 0;
+    }
+
+    /* ---- States ---- */
+    .state-card {
+      text-align: center;
+      padding: 60px 24px;
+      animation: fadeUp 0.6s ease both;
+    }
+    .state-icon { font-size: 36px; margin-bottom: 12px; }
+    .state-text {
+      font-family: var(--font-heading);
+      font-size: 14px;
+      font-weight: 300;
+      color: var(--subtitle);
+      line-height: 1.7;
+    }
+    .state-small {
+      font-size: 12px;
+      margin-top: 6px;
+      color: var(--divider);
+    }
+  </style>
+</head>
+<body>
+
+<nav class="site-nav">
+  <a class="site-nav-back" href="index.html">
+    <svg viewBox="0 0 9 15"><polyline points="8,1 1,7.5 8,14"/></svg>
+    Home
+  </a>
+  <span class="site-nav-title">Calendar</span>
+</nav>
+
+<div class="page-header">
+  <div class="page-title">Calendar</div>
+  <div class="page-subtitle">Family events</div>
+  <div class="page-divider"></div>
+</div>
+
+<div class="events-wrap" id="events-wrap">
+  <div class="state-card">
+    <div class="state-text">Loading…</div>
+  </div>
+</div>
+
+<script>
+  function escHtml(s) {
+    return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+  }
+
+  function relativeDay(dateObj) {
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    const diff = Math.round((dateObj - today) / 86400000);
+    if (diff === 0) return 'today';
+    if (diff === 1) return 'tomorrow';
+    return null;
+  }
+
+  function formatTime(dateTimeStr) {
+    const d = new Date(dateTimeStr);
+    return d.toLocaleTimeString('en-GB', { hour: 'numeric', minute: '2-digit', hour12: true });
+  }
+
+  async function loadCalendar() {
+    const wrap = document.getElementById('events-wrap');
+    try {
+      const resp = await fetch('/api/calendar?max=40');
+      const data = await resp.json();
+
+      if (data.error) {
+        wrap.innerHTML = `
+          <div class="state-card">
+            <div class="state-icon">📅</div>
+            <div class="state-text">Calendar isn't set up yet.</div>
+            <div class="state-small">Add your Google Calendar API key and ID in Vercel.</div>
+          </div>`;
+        return;
+      }
+
+      const items = data.items || [];
+      if (items.length === 0) {
+        wrap.innerHTML = `
+          <div class="state-card">
+            <div class="state-icon">✨</div>
+            <div class="state-text">Nothing coming up.<br>Enjoy the quiet.</div>
+          </div>`;
+        return;
+      }
+
+      // Group by date
+      const groups = {};
+      items.forEach(ev => {
+        const isAllDay = !!ev.start.date;
+        const date = isAllDay ? ev.start.date : ev.start.dateTime.substring(0, 10);
+        if (!groups[date]) groups[date] = [];
+        groups[date].push(ev);
+      });
+
+      wrap.innerHTML = Object.entries(groups).map(([date, evs], gi) => {
+        const [y, m, d] = date.split('-').map(Number);
+        const dateObj = new Date(y, m - 1, d);
+        const dateStr = dateObj.toLocaleDateString('en-GB', {
+          weekday: 'short', day: 'numeric', month: 'short'
+        }).toUpperCase();
+        const rel = relativeDay(dateObj);
+
+        const rows = evs.map(ev => {
+          const isAllDay = !!ev.start.date;
+          const time = isAllDay ? 'all day' : formatTime(ev.start.dateTime);
+          return `
+            <div class="event-row">
+              <div class="event-dot"></div>
+              <span class="event-name">${escHtml(ev.summary || '(No title)')}</span>
+              <span class="event-time">${escHtml(time)}</span>
+            </div>`;
+        }).join('');
+
+        return `
+          <div class="date-group" style="animation-delay:${gi * 0.06}s">
+            <div class="date-header">
+              <span class="date-str">${dateStr}</span>
+              ${rel ? `<span class="date-rel">${rel}</span>` : ''}
+            </div>
+            ${rows}
+          </div>`;
+      }).join('');
+
+    } catch {
+      wrap.innerHTML = `
+        <div class="state-card">
+          <div class="state-icon">📅</div>
+          <div class="state-text">Couldn't load events.<br>Check your connection.</div>
+        </div>`;
+    }
+  }
+
+  loadCalendar();
+
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('/sw.js').catch(() => {});
+  }
+</script>
+
+</body>
+</html>

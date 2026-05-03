@@ -1,10 +1,11 @@
-const CACHE = 'hannah-v3';
+const CACHE = 'hannah-v4';
 const URLS = [
   '/',
   '/index.html',
   '/holidays.html',
   '/europe-2026.html',
   '/notes.html',
+  '/calendar.html',
   '/style.css',
   '/icon.svg',
   '/manifest.json',
@@ -26,6 +27,7 @@ self.addEventListener('activate', e => {
 
 self.addEventListener('fetch', e => {
   if (!e.request.url.startsWith(self.location.origin)) return;
+  if (e.request.url.includes('/api/')) return;
   e.respondWith(
     caches.match(e.request).then(cached => {
       if (cached) return cached;
