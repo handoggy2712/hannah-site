@@ -1,4 +1,4 @@
-const CACHE = 'hannah-v5';
+const CACHE = 'hannah-v6';
 const URLS = [
   '/',
   '/index.html',
