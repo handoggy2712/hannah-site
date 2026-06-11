@@ -181,76 +181,6 @@
       line-height: 1;
     }
 
-    /* ---- Coming Up ---- */
-    .coming-up-wrap {
-      max-width: 480px;
-      margin: 0 auto;
-      padding: 20px 24px 0;
-      animation: fadeUp 0.6s ease 0.12s both;
-    }
-
-    .coming-up-label {
-      font-family: var(--font-heading);
-      font-size: 10px;
-      font-weight: 600;
-      color: var(--subtitle);
-      text-transform: uppercase;
-      letter-spacing: 1.4px;
-      margin-bottom: 10px;
-    }
-
-    .coming-up-card {
-      background: var(--callout-bg);
-      border-radius: 20px;
-      overflow: hidden;
-    }
-
-    .coming-up-row {
-      display: flex;
-      align-items: center;
-      padding: 11px 18px;
-      gap: 10px;
-    }
-    .coming-up-row + .coming-up-row {
-      border-top: 1px solid var(--divider);
-    }
-
-    .coming-up-dot {
-      width: 6px;
-      height: 6px;
-      border-radius: 50%;
-      background: #4CBAA4;
-      flex-shrink: 0;
-    }
-
-    .coming-up-name {
-      font-family: var(--font-heading);
-      font-size: 14px;
-      font-weight: 500;
-      color: var(--title);
-      flex: 1;
-      min-width: 0;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-    }
-
-    .coming-up-when {
-      font-family: var(--font-heading);
-      font-size: 12px;
-      font-weight: 400;
-      color: var(--subtitle);
-      flex-shrink: 0;
-    }
-
-    .coming-up-loading {
-      padding: 14px 18px;
-      font-family: var(--font-heading);
-      font-size: 13px;
-      font-weight: 300;
-      color: var(--subtitle);
-    }
-
     /* ---- Footer ---- */
     .home-footer {
       max-width: 480px;
@@ -286,14 +216,6 @@
   </a>
 </div>
 
-<!-- Coming Up -->
-<div class="coming-up-wrap" id="coming-up-wrap" style="display:none">
-  <div class="coming-up-label">Coming up</div>
-  <a class="coming-up-card" id="coming-up-card" href="calendar.html" style="text-decoration:none;display:block;">
-    <div class="coming-up-loading">Loading…</div>
-  </a>
-</div>
-
 <!-- Pages -->
 <div class="sections-wrap">
   <div class="sections-label">My pages</div>
@@ -317,47 +239,6 @@
       </div>
       <div class="tile-chevron">›</div>
     </a>
-
-    <a class="section-tile" href="todo.html" style="background:#E86448;">
-      <div class="tile-icon-wrap">
-        <!-- clipboard sketchy -->
-        <svg width="42" height="42" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <path d="M10 14 Q9.5 10 13.5 10 L34.5 10 Q38.5 10 38 14 L38 41 Q38.5 45 34.5 45 L13.5 45 Q9.5 45 10 41 Z" fill="#5A96E0" fill-opacity="0.2" stroke="#5A96E0" stroke-width="3" stroke-linejoin="round"/>
-          <path d="M18.5 10 L18 7 Q18 5 20 5 L28 5 Q30 5 30 7 L29.5 10" stroke="#5A96E0" stroke-width="3" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
-          <polyline points="15,24 19.5,29 28.5,19" stroke="#5A96E0" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
-          <path d="M15 36 Q24 37 33 36" stroke="#5A96E0" stroke-width="2.4" stroke-linecap="round"/>
-        </svg>
-      </div>
-      <div class="tile-content">
-        <div class="tile-title">To-do</div>
-        <div class="tile-desc">Daily &amp; longer-term tasks</div>
-      </div>
-      <div class="tile-chevron">›</div>
-    </a>
-
-    <a class="section-tile" href="notes.html" style="background:#F5C428;">
-      <div class="tile-icon-wrap">
-        <!-- pencil sketchy -->
-        <svg width="42" height="42" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <!-- eraser -->
-          <path d="M34 5 Q38 5 39.5 6.5 L41.5 8.5 Q43 10 43 14 L38 14 L34 5 Z" fill="#4CBAA4" fill-opacity="0.5" stroke="#4CBAA4" stroke-width="2.5" stroke-linejoin="round"/>
-          <!-- barrel -->
-          <path d="M34 5 L11 28 L8 40 L20 37 L43 14 Q43 10 39.5 6.5 Z" fill="#4CBAA4" fill-opacity="0.18" stroke="#4CBAA4" stroke-width="2.8" stroke-linejoin="round"/>
-          <!-- tip -->
-          <path d="M11 28 L8 40 L20 37 L15.5 32.5 Z" fill="#4CBAA4" fill-opacity="0.4" stroke="#4CBAA4" stroke-width="2" stroke-linejoin="round"/>
-          <!-- centre seam line -->
-          <path d="M37 9.5 Q24 22 15 33" stroke="#4CBAA4" stroke-width="1.8" stroke-linecap="round" opacity="0.45"/>
-          <!-- tip dot -->
-          <circle cx="10.5" cy="39" r="1.8" fill="#4CBAA4"/>
-        </svg>
-      </div>
-      <div class="tile-content">
-        <div class="tile-title">Notes</div>
-        <div class="tile-desc">Things to remember</div>
-      </div>
-      <div class="tile-chevron">›</div>
-    </a>
-
 
   </div>
 </div>
@@ -396,48 +277,6 @@
     numEl.textContent = '☀️';
     unitEl.textContent = 'Currently on holiday!';
   }
-
-  // Coming Up widget
-  function escHtml(s) {
-    return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
-  }
-
-  function relativeTime(dateStr, isAllDay) {
-    const today = new Date();
-    today.setHours(0, 0, 0, 0);
-    let evDate;
-    if (isAllDay) {
-      const [y, m, d] = dateStr.split('-').map(Number);
-      evDate = new Date(y, m - 1, d);
-    } else {
-      const d = new Date(dateStr);
-      evDate = new Date(d.getFullYear(), d.getMonth(), d.getDate());
-    }
-    const diff = Math.round((evDate - today) / 86400000);
-    if (diff === 0) return 'today';
-    if (diff === 1) return 'tomorrow';
-    if (diff < 7) return `in ${diff} days`;
-    if (diff < 14) return 'next week';
-    return `in ${Math.round(diff / 7)} weeks`;
-  }
-
-  fetch('/api/calendar?max=5')
-    .then(r => r.json())
-    .then(data => {
-      if (data.error || !data.items?.length) return;
-      const card = document.getElementById('coming-up-card');
-      card.innerHTML = data.items.map(ev => {
-        const isAllDay = !!ev.start.date;
-        const dateStr = isAllDay ? ev.start.date : ev.start.dateTime;
-        return `<div class="coming-up-row">
-          <div class="coming-up-dot"></div>
-          <span class="coming-up-name">${escHtml(ev.summary || '(No title)')}</span>
-          <span class="coming-up-when">${relativeTime(dateStr, isAllDay)}</span>
-        </div>`;
-      }).join('');
-      document.getElementById('coming-up-wrap').style.display = 'block';
-    })
-    .catch(() => {});
 
   if ('serviceWorker' in navigator) {
     navigator.serviceWorker.register('/sw.js').catch(() => {});
